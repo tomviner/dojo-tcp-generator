@@ -1,4 +1,5 @@
 import socket
+import random
 
 
 if __name__ == '__main__':
@@ -7,7 +8,13 @@ if __name__ == '__main__':
     PORT = 8080
 
     def process_data(data):
-        return b"No You " + data
+        answers = [
+            b"No You " + data,
+            b"Tell that to your sister and/or brother!",
+            b"You didn't!",
+            b"That didn't even hurt my feelings",
+        ]
+        return random.choice(answers) + b'\n'
 
     while 1:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
