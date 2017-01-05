@@ -7,7 +7,7 @@ if __name__ == '__main__':
     PORT = 8080
 
     def process_data(data):
-        return data[::-1]
+        return b"No You " + data
 
     while 1:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
