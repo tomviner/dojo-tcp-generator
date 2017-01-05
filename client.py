@@ -3,6 +3,7 @@ from random import choice
 
 import urbandictionary
 import argparse
+from time import sleep
 
 
 def send_message(praise):
@@ -27,7 +28,7 @@ def send_message(praise):
     if praise:
         MESSAGE = choice(praises)
 
-    print ('Sending: {0}'.format(MESSAGE))
+    print ('\nSending: {0}'.format(MESSAGE))
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((TCP_IP, TCP_PORT))
@@ -44,6 +45,7 @@ def send_message(praise):
                 urban_word.example
             )
         )
+    sleep(2)
 
 
 if __name__ == "__main__":
@@ -53,4 +55,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     praise = args.praise
-    send_message(praise)
+    while 1:
+        send_message(praise)
