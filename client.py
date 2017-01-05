@@ -2,31 +2,55 @@ import socket
 from random import choice
 
 import urbandictionary
+import argparse
 
 
-urban_dic_objects = urbandictionary.random()
+def send_message(praise):
+    urban_dic_objects = urbandictionary.random()
 
-insult = 'You {}!'.format(urban_dic_objects[0].word)
+    urban_word = urban_dic_objects[0]
 
-praise = [
-    'I like you',
-    'You smell great',
-    'Hope I see you again',
-    'You are welcome',
-]
+    insult = 'You {}!'.format(urban_word.word)
+
+    praises = [
+        'I like you',
+        'You smell great',
+        'Hope I see you again',
+        'You are welcome',
+    ]
+
+    TCP_IP = '127.0.0.1'
+    TCP_PORT = 8080
+    BUFFER_SIZE = 1024
+
+    MESSAGE = insult
+    if praise:
+        MESSAGE = choice(praises)
+
+    print ('Sending: {0}'.format(MESSAGE))
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((TCP_IP, TCP_PORT))
+    s.send(MESSAGE.encode())
+    data = s.recv(BUFFER_SIZE)
+    s.close()
+
+    print ('received data: {0}'.format(data.decode()))
+
+    if not praise:
+        print (
+            '\nDefinition of {}: {}\n'.format(
+                urban_word.word,
+                urban_word.example
+            )
+        )
 
 
-TCP_IP = '127.0.0.1'
-TCP_PORT = 8080
-BUFFER_SIZE = 1024
-MESSAGE = insult
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--praise', action='store_true')
 
-print ('Sending: {0}'.format(MESSAGE))
+    args = parser.parse_args()
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((TCP_IP, TCP_PORT))
-s.send(MESSAGE.encode())
-data = s.recv(BUFFER_SIZE)
-s.close()
-
-print ('received data: {0}'.format(data.decode()))
+    praise = args.praise
+    send_message(praise)
