@@ -11,7 +11,7 @@ def send_message(praise):
 
     urban_word = urban_dic_objects[0]
 
-    insult = 'You {}!'.format(urban_word.word)
+    insult = 'Trump says: You {}!'.format(urban_word.word)
 
     praises = [
         'I like you',
@@ -28,6 +28,7 @@ def send_message(praise):
     if praise:
         MESSAGE = choice(praises)
 
+    print ('=========================')
     print ('\nSending: {0}'.format(MESSAGE))
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -45,7 +46,8 @@ def send_message(praise):
                 urban_word.example
             )
         )
-    sleep(2)
+    print ('=========================')
+    sleep(4)
 
 
 if __name__ == "__main__":
