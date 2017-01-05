@@ -8,11 +8,18 @@ insults = [
     'Mother mocker!',
 ]
 
+praise = [
+    'I like you',
+    'You smell great',
+    'Hope I see you again',
+    'You are welcome',
+]
+
 
 TCP_IP = '127.0.0.1'
-TCP_PORT = 5005
+TCP_PORT = 8080
 BUFFER_SIZE = 1024
-MESSAGE = choice(insults)
+MESSAGE = choice(insults + praise)
 
 print ('Sending: {0}'.format(MESSAGE))
 
