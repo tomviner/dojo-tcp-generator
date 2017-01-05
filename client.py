@@ -1,12 +1,12 @@
 import socket
 from random import choice
 
-insults = [
-    'You crazy guy',
-    'You bad head',
-    'Get lost',
-    'Mother mocker!',
-]
+import urbandictionary
+
+
+urban_dic_objects = urbandictionary.random()
+
+insult = 'You {}!'.format(urban_dic_objects[0].word)
 
 praise = [
     'I like you',
@@ -19,7 +19,7 @@ praise = [
 TCP_IP = '127.0.0.1'
 TCP_PORT = 8080
 BUFFER_SIZE = 1024
-MESSAGE = choice(insults + praise)
+MESSAGE = insult
 
 print ('Sending: {0}'.format(MESSAGE))
 
