@@ -1,53 +1,43 @@
+import argparse
 import socket
 from random import choice
-
-import urbandictionary
-import argparse
 from time import sleep
 
+import urbandictionary
 
-def send_message(praise):
-    urban_dic_objects = urbandictionary.random()
+TCP_IP = '127.0.0.1'
+TCP_PORT = 8080
+BUFFER_SIZE = 1024
+SEPARATOR = ('=========================')
 
-    urban_word = urban_dic_objects[0]
 
-    insult = 'Trump says: You {}!'.format(urban_word.word)
-
-    praises = [
-        'I like you',
-        'You smell great',
-        'Hope I see you again',
-        'You are welcome',
-    ]
-
-    TCP_IP = '127.0.0.1'
-    TCP_PORT = 8080
-    BUFFER_SIZE = 1024
-
-    MESSAGE = insult
-    if praise:
-        MESSAGE = choice(praises)
-
-    print ('=========================')
-    print ('\nSending: {0}'.format(MESSAGE))
+def send_tcp_message(message):
+    print ('\nSending: {0}'.format(message))
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((TCP_IP, TCP_PORT))
-    s.send(MESSAGE.encode())
+    s.send(message.encode())
     data = s.recv(BUFFER_SIZE)
     s.close()
 
     print ('received data: {0}'.format(data.decode()))
 
-    if not praise:
-        print (
-            '\nDefinition of {}: {}\n'.format(
-                urban_word.word,
-                urban_word.example
-            )
-        )
-    print ('=========================')
-    sleep(4)
+
+def get_praise():
+    return choice([
+        'I like you',
+        'You smell great',
+        'Hope I see you again',
+        'You are welcome',
+    ])
+
+
+def get_insult():
+    urban_word = urbandictionary.random()[0]
+
+    trump_insult = 'Trump says: You {}!'.format(urban_word.word)
+
+    return urban_word, trump_insult
 
 
 if __name__ == "__main__":
@@ -57,5 +47,29 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     praise = args.praise
+
     while 1:
-        send_message(praise)
+        if praise:
+            message = get_praise()
+            definition_text = ''
+        else:
+            urban_word, message = get_insult()
+            definition_text = (
+                '\nDefinition of {}: {}\n'.format(
+                    urban_word.word,
+                    urban_word.definition
+                )
+            )
+
+        print (SEPARATOR)
+        send_tcp_message(message)
+
+        if not praise:
+            print (
+                '\nDefinition of {}: {}\n'.format(
+                    urban_word.word,
+                    urban_word.definition
+                )
+            )
+        print (SEPARATOR)
+        sleep(4)
